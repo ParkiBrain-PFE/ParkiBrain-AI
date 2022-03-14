@@ -26,13 +26,13 @@ def main():
   while cap.isOpened():
     _, frame = cap.read()
     img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320,320))
-    objects_array = detect_objects(detector, img, 0.8)
+    objects_array = detect_objects(detector, img, 0.65)
     bounding_box = get_bounding_box(objects_array, CAMERA_WIDTH, CAMERA_HEIGHT)
     if bounding_box:
       xmin, ymin, xmax, ymax = bounding_box
       plate = frame[ymin:ymax, xmin:xmax]
       plate = cv2.resize(plate, (320,320))
-      content = detect_objects(recognizer, plate, 0.5)
+      content = detect_objects(recognizer, plate, 0.3)
       content = plate_to_string(content)      
 
       if content:
