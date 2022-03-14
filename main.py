@@ -1,43 +1,50 @@
+import re
 import cv2
-from tflite_runtime.interpreter import Interpreter
-from detection.detector import detect_objects
+from detection.utils import detect_objects, get_bounding_box, load_model, load_labels
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
+labels = load_labels(path='labels.txt')
 
-def get_bounding_box(objects_array):
-  """Gets the bounding box of the highest score object"""
-  licence_plate = None
-  sc = 0
-  for obj in objects_array:
-    if obj["score"] > sc:
-      sc = obj["score"]
-      licence_plate = obj["bounding_box"]
 
-  if sc > 0:
-    ymin, xmin, ymax, xmax = licence_plate["bounding_box"]
-    xmin = int(max(1,xmin * CAMERA_WIDTH))
-    xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
-    ymin = int(max(1, ymin * CAMERA_HEIGHT))
-    ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
-    licence_plate = (xmin, ymin, xmax, ymax) 
-  return licence_plate
+def plate_to_string(plate)->str:
+  # print(plate)
+  content = ''
+  classes = []
+  # if len(plate) > 0:
+  for obj in plate:
+    _, xmin, _, _ = obj['bounding_box']
+    class_id = str(labels[int(obj['class_id'])])
+    classes.append((class_id, xmin))
+  
+  classes.sort()
+  
+
+
+  # for obj in plate:
+  #   content += str(labels[int(obj['class_id'])])
+  return content
+
 
 def main():
-  interpreter = Interpreter('detect.tflite')
-  interpreter.allocate_tensors()
-  interpreter.get_input_details()[0]['shape']
+  detector = load_model('./models/detect.tflite')
+  recognizer = load_model('./models/recognize.tflite')
+
   cap = cv2.VideoCapture(0)
   
   while cap.isOpened():
     _, frame = cap.read()
     img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320,320))
-    objects_array = detect_objects(interpreter, img, 0.8)
-    bounding_box = get_bounding_box(objects_array)
+    objects_array = detect_objects(detector, img, 0.8)
+    bounding_box = get_bounding_box(objects_array, CAMERA_WIDTH, CAMERA_HEIGHT)
     if bounding_box:
       xmin, ymin, xmax, ymax = bounding_box
-      cv2.rectangle(frame,(xmin, ymin),(xmax, ymax),(0,255,0),3)
-      
+      plate = frame[ymin:ymax, xmin:xmax]
+      plate = cv2.resize(plate, (320,320))
+      content = detect_objects(recognizer, plate, 0.5)
+      content = plate_to_string(content)      
+
+      print(content)      
 
     cv2.imshow('Camera', frame)
     
@@ -47,3 +54,14 @@ def main():
 
 if __name__ == "__main__":
   main()
+
+
+
+# def process_img(img):
+#   """
+#   Process image by removing noise and transforming pixels above 100 to white and others below to black.
+#   """
+#   img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#   img = cv2.GaussianBlur(img,(5,5),0)
+#   img = cv2.threshold(img, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY)[1] 
+#   return img
