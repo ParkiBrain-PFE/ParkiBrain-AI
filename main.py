@@ -8,21 +8,12 @@ labels = load_labels(path='labels.txt')
 
 
 def plate_to_string(plate)->str:
-  # print(plate)
+  if len(plate) < 4:
+    return None
   content = ''
-  classes = []
-  # if len(plate) > 0:
-  for obj in plate:
-    _, xmin, _, _ = obj['bounding_box']
-    class_id = str(labels[int(obj['class_id'])])
-    classes.append((class_id, xmin))
-  
-  classes.sort()
-  
-
-
-  # for obj in plate:
-  #   content += str(labels[int(obj['class_id'])])
+  sorted_list = sorted(plate, key=lambda k: k["bounding_box"][1])
+  for obj in sorted_list:
+    content += str(labels[int(obj['class_id'])])
   return content
 
 
@@ -44,7 +35,8 @@ def main():
       content = detect_objects(recognizer, plate, 0.5)
       content = plate_to_string(content)      
 
-      print(content)      
+      if content:
+        print(content)      
 
     cv2.imshow('Camera', frame)
     
