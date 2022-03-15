@@ -1,21 +1,8 @@
-import re
 import cv2
-from detection.utils import detect_objects, get_bounding_box, load_model, load_labels
-
-CAMERA_WIDTH = 640
-CAMERA_HEIGHT = 480
-labels = load_labels(path='labels.txt')
-
-
-def plate_to_string(plate)->str:
-  if len(plate) < 4:
-    return None
-  content = ''
-  sorted_list = sorted(plate, key=lambda k: k["bounding_box"][1])
-  for obj in sorted_list:
-    content += str(labels[int(obj['class_id'])])
-  return content
-
+from utils.allocate_resources import load_model
+from utils.detect import detect_objects, get_bounding_box
+from utils.constants import CAMERA_HEIGHT, CAMERA_WIDTH 
+from utils.plate_ocr import plate_to_string
 
 def main():
   detector = load_model('./models/detect.tflite')
@@ -46,14 +33,3 @@ def main():
 
 if __name__ == "__main__":
   main()
-
-
-
-# def process_img(img):
-#   """
-#   Process image by removing noise and transforming pixels above 100 to white and others below to black.
-#   """
-#   img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#   img = cv2.GaussianBlur(img,(5,5),0)
-#   img = cv2.threshold(img, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY)[1] 
-#   return img
