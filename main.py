@@ -46,14 +46,3 @@ def main():
 
 if __name__ == "__main__":
   main()
-
-
-
-# def process_img(img):
-#   """
-#   Process image by removing noise and transforming pixels above 100 to white and others below to black.
-#   """
-#   img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#   img = cv2.GaussianBlur(img,(5,5),0)
-#   img = cv2.threshold(img, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY)[1] 
-#   return img
