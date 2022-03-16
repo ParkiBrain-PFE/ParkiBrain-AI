@@ -1,6 +1,7 @@
 LABELS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "d", "h", "w", "waw"]
 
 def plate_to_string(plate)-> str:
+  """get the plate informations, then sort detected characters based on their x_min field and returns the value of the plate as string"""
   if len(plate) < 4:
     return None
   content = ''
