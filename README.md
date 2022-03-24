@@ -48,7 +48,10 @@ Now we have two models capable of detecting and reading the number plate, but we
 - For recognition: the model returns unordered detected characters. we wrote a function that can handle sorting those characters based on x_min value.
 
  ## How to run it
- To run the script just create necessary models using the notebook ```docs/Training_Models.ipynb```, and place those models in a directory called ```models```. Then install the dependencies using the commande ```pip install -r requirements.txt```.
+ To run the script just create necessary models using the notebook ```docs/Training_Models.ipynb```, and place those models in a directory called ```models```. Then install the dependencies using the following command
+```
+pip install -r requirements.txt
+```
  After that you can run it using ```python main.py```.
 
  ## Conclusion
