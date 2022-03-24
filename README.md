@@ -34,7 +34,7 @@ Our approach was to use Object Detection to detect plate characters from images.
 After downloading the two datasets. we uploaded them to [roboflow.com](https://roboflow.com) as it offers data augmentation technics in the easiest way, as well as annotations conversion to any standard.
 
 ### Library and Model Architecture
-We have chosen myssd_mobilenetv2 320x320 model with tensorflow framework. myssd_mobilenet is a Single-Shot multibox Detection (SSD) network intended to perform object detection.SSD Mobilenet V2 is a one-stage object detection model which has gained popularity for its lean network and novel depthwise separable convolutions. It is a model commonly deployed on low compute devices such as mobile (hence the name Mobilenet) with high accuracy and performance.
+We have chosen ```myssd_mobilenetv2_320x320``` model with ```Tensorflow``` framework. myssd_mobilenet is a Single-Shot multibox Detection (SSD) network intended to perform object detection.SSD Mobilenet V2 is a one-stage object detection model which has gained popularity for its lean network and novel depthwise separable convolutions. It is a model commonly deployed on low compute devices such as mobile (hence the name Mobilenet) with high accuracy and performance.
 
 The both models were pretrained on the COCO dataset, because we didn’t have enough data, therefor it would only make sense to take the advantage of transfer learning of models that were trained on such a rich dataset.
 
@@ -58,5 +58,5 @@ pip install -r requirements.txt
 This project is a Graduation Project from High School of technology of Meknes. Made by: 
 
 - [Ismail Ajizou](https://github.com/ismailajizou)
-- [Mohamed Ait Messkine](https://github.com/AitMesskine)
 - [El Mehdi Salah Ben Souda](https://github.com/Mehdi-Ben-Souda)
+- [Mohamed Ait Messkine](https://github.com/AitMesskine)
